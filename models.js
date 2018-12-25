@@ -1,10 +1,12 @@
 const { sequelize, Sequelize } = require('./connection');
 const user = sequelize.define('user', {
     firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
     },
     lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
     }
 });
 
@@ -13,9 +15,22 @@ user.sync();
 (async () => {
     try {
         await sequelize.transaction(async (t) => {
-            return user.create({
-                firstName: 'Abraham',
-                lastName: 'Lincoln'
+            await user.create({
+                firstName: 'Oop',
+                lastName: 'Node'
+            }, { transaction: t })
+            /* await user.update(
+                 { firstName: 'Java' },
+                 {
+                     where: {
+                         lastName: 'Node'
+                     }
+                 }, { transaction: t })*/
+
+            await user.destroy({
+                where: {
+                    firstName: 'Java'
+                }
             }, { transaction: t })
         })
     }
